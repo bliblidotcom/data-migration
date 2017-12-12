@@ -1,0 +1,56 @@
+package migrations;
+
+import com.gdn.data.migration.core.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
+
+/**
+ * Auto generated migration script
+ */
+@Component
+public class Migration_{{version}} implements Migration {
+
+  private static Logger LOG = LoggerFactory.getLogger(Migration_{{version}}.class);
+
+  @Override
+  public Long version() {
+    return {{version}}L; // DON'T EDIT THIS VERSION!!!
+  }
+
+  @Override
+  public String name() {
+    return "TODO add your migration script name here";
+  }
+
+  // @Autowired
+  // private MongoConfiguration mongoConfiguration;
+
+  // @Autowired
+  // private PostgreConfiguration postgreConfiguration;
+
+  // @Autowired
+  // private ElasticsearchConfiguration elasticsearchConfiguration;
+
+  // @Autowired
+  // private OkHttpClient okHttpClient;
+
+  // @Autowired
+  // private ObjectMapper objectMapper;
+
+  // @Autowired
+  // private PostgreService postgreService;
+
+  // @Autowired
+  // private MongoDatabase mongoDatabase;
+
+  @Override
+  public void migrate() throws Exception {
+    // Migration script
+  }
+
+  @Override
+  public void rollback() throws Exception {
+    // Rollback script
+  }
+}

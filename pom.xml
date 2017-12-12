@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>com.blibli.oss</groupId>
+  <artifactId>data-migration</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+
+  <scm>
+    <connection>scm:git:git@github.com:bliblidotcom/data-migration.git</connection>
+    <developerConnection>scm:git:git@github.com:bliblidotcom/data-migration.git</developerConnection>
+    <tag>HEAD</tag>
+  </scm>
+
+  <modules>
+    <module>data-migration-core</module>
+    <module>data-migration-migrate</module>
+    <module>data-migration-rollback</module>
+    <module>data-migration-generator</module>
+    <module>data-migration-postgre</module>
+    <module>data-migration-elasticsearch</module>
+    <module>data-migration-mongo</module>
+    <module>data-migration-app</module>
+    <module>data-migration-cassandra</module>
+  </modules>
+
+  <packaging>pom</packaging>
+
+  <name>data-migration</name>
+  <description>Blibli.com Database Migration</description>
+
+  <parent>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-parent</artifactId>
+    <version>1.5.9.RELEASE</version>
+    <relativePath />
+  </parent>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    <java.version>1.8</java.version>
+    <cassandra-driver.version>3.1.2</cassandra-driver.version>
+  </properties>
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>com.blibli.oss</groupId>
+        <artifactId>data-migration-core</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.blibli.oss</groupId>
+        <artifactId>data-migration-elasticsearch</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.blibli.oss</groupId>
+        <artifactId>data-migration-generator</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.blibli.oss</groupId>
+        <artifactId>data-migration-mongo</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.blibli.oss</groupId>
+        <artifactId>data-migration-postgre</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.blibli.oss</groupId>
+        <artifactId>data-migration-migrate</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.blibli.oss</groupId>
+        <artifactId>data-migration-rollback</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.squareup.okhttp3</groupId>
+        <artifactId>okhttp</artifactId>
+        <version>3.4.1</version>
+      </dependency>
+      <dependency>
+        <groupId>com.github.jknack</groupId>
+        <artifactId>handlebars</artifactId>
+        <version>4.0.6</version>
+      </dependency>
+      <dependency>
+        <groupId>commons-io</groupId>
+        <artifactId>commons-io</artifactId>
+        <version>2.5</version>
+      </dependency>
+      <dependency>
+        <groupId>org.springframework.data</groupId>
+        <artifactId>spring-data-mongodb</artifactId>
+        <version>1.9.2.RELEASE</version>
+    </dependency>
+    </dependencies>
+  </dependencyManagement>
+
+  <build>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.jacoco</groupId>
+          <artifactId>jacoco-maven-plugin</artifactId>
+          <version>0.7.8</version>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-release-plugin</artifactId>
+        <version>2.5.3</version>
+        <configuration>
+          <releaseProfiles>release</releaseProfiles>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.jacoco</groupId>
+        <artifactId>jacoco-maven-plugin</artifactId>
+        <configuration>
+          <rules>
+            <rule implementation="org.jacoco.maven.RuleConfiguration">
+              <element>BUNDLE</element>
+              <limits>
+                <limit implementation="org.jacoco.report.check.Limit">
+                  <counter>INSTRUCTION</counter>
+                  <value>COVEREDRATIO</value>
+                  <minimum>0.95</minimum>
+                </limit>
+                <limit implementation="org.jacoco.report.check.Limit">
+                  <counter>LINE</counter>
+                  <value>COVEREDRATIO</value>
+                  <minimum>0.95</minimum>
+                </limit>
+              </limits>
+            </rule>
+          </rules>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
+  <repositories>
+    <repository>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+      <id>bintray-bliblidotcom-maven</id>
+      <name>bintray</name>
+      <url>https://dl.bintray.com/bliblidotcom/maven</url>
+    </repository>
+    <repository>
+      <id>spring-snapshots</id>
+      <name>Spring Snapshots</name>
+      <url>https://repo.spring.io/snapshot</url>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+    </repository>
+    <repository>
+      <id>spring-milestones</id>
+      <name>Spring Milestones</name>
+      <url>https://repo.spring.io/milestone</url>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </repository>
+  </repositories>
+
+  <distributionManagement>
+    <repository>
+      <id>bintray-bliblidotcom-maven</id>
+      <name>bliblidotcom-maven</name>
+      <url>https://api.bintray.com/maven/bliblidotcom/maven/data-migration/;publish=1</url>
+    </repository>
+  </distributionManagement>
+
+</project>
