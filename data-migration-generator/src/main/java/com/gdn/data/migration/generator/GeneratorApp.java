@@ -3,6 +3,7 @@ package com.gdn.data.migration.generator;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.cassandra.CassandraAutoConfiguration;
+import org.springframework.boot.autoconfigure.data.mongo.MongoDataAutoConfiguration;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.autoconfigure.jooq.JooqAutoConfiguration;
 import org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration;
@@ -18,7 +19,8 @@ import org.springframework.context.annotation.FilterType;
     JooqAutoConfiguration.class,
     DataSourceAutoConfiguration.class,
     MongoAutoConfiguration.class,
-    CassandraAutoConfiguration.class
+    CassandraAutoConfiguration.class,
+    MongoDataAutoConfiguration.class
 }, excludeName = {
     "com.gdn.data.migration.elaticsearch.ElasticsearchAutoConfigurer",
     "com.gdn.data.migration.postgre.PostgreAutoConfigurer",
