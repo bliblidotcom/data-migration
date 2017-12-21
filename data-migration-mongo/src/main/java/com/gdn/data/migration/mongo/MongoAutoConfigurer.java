@@ -60,17 +60,17 @@ public class MongoAutoConfigurer {
   /**
    * MongoDBFactory bean
    *
-   * @param mongo
+   * @param mongoClient
    * @param configuration
    * @return
    * @throws Exception
    */
   @Bean
   @Autowired
-  public SimpleMongoDbFactory mongoDbFactory(MongoClient mongo, MongoConfiguration configuration)
+  public SimpleMongoDbFactory mongoDbFactory(MongoClient mongoClient, MongoConfiguration configuration)
       throws Exception {
     String database = configuration.getDatabase();
-    return new SimpleMongoDbFactory(mongo, database);
+    return new SimpleMongoDbFactory(mongoClient, database);
   }
 
   /**
