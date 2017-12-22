@@ -32,9 +32,9 @@ workflows:
       jobs:
         - build
 
-  build-project-hehe:
+  deploy-project:
       jobs:
-        - build
+        - deploy_to_bintray:
           filters:
             branches:
               only:
