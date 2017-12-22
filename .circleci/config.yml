@@ -1,6 +1,6 @@
 version: 2
 jobs:
-  build_maven:
+  build:
     docker:
       - image: circleci/openjdk:8-jdk
 
@@ -27,10 +27,12 @@ jobs:
 
 workflows:
   version: 2
-  build:
+
+  build-project:
     jobs:
-      - build_maven
-  deploy:
+      - build
+
+  deploy-project:
     jobs:
       - deploy_to_bintray
           filters:
