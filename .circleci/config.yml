@@ -35,7 +35,7 @@ workflows:
   deploy-project:
       jobs:
         - deploy_to_bintray:
-          filters:
-            branches:
-              only:
-                - master
+            filters:
+              branches:
+                only:
+                  - master
