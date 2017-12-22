@@ -29,5 +29,9 @@ workflows:
   version: 2
 
   build-project:
-    jobs:
-      - build
+      jobs:
+        - build
+
+  build-project-hehe:
+      jobs:
+        - build
