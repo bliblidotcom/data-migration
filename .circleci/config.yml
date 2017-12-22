@@ -21,9 +21,21 @@ jobs:
       - run: mvn -B release:prepare -Dresume=false -DskipTests
       - run: mvn -s .circleci/setting.xml release:perform -DskipTests
 
+    branches:
+      only:
+        - release
+
 workflows:
   version: 2
   build_and_deploy:
     jobs:
       - build
+        filters:
+          branches:
+            only:
+              - master
       - deploy_to_bintray
+        filters:
+          branches:
+            only:
+              - master
