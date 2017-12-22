@@ -31,10 +31,3 @@ workflows:
   build-project:
     jobs:
       - build
-
-  deploy-project:
-    jobs:
-      - deploy_to_bintray
-          filters:
-            branches:
-              only: master
