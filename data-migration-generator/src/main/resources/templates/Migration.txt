@@ -36,6 +36,9 @@ public class Migration_{{version}} implements Migration {
   // private OkHttpClient okHttpClient;
 
   // @Autowired
+  // private RestHighLevelClient restHighLevelClient;
+
+  // @Autowired
   // private ObjectMapper objectMapper;
 
   // @Autowired

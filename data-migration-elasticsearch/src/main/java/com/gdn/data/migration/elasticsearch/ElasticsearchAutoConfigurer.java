@@ -4,6 +4,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gdn.data.migration.core.DataMigrationAutoConfigurer;
 import com.gdn.data.migration.core.DataMigrationProperties;
 import okhttp3.OkHttpClient;
+import org.apache.http.HttpHost;
+import org.elasticsearch.client.RestClient;
+import org.elasticsearch.client.RestHighLevelClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -43,6 +46,22 @@ public class ElasticsearchAutoConfigurer {
                                                      ObjectMapper objectMapper,
                                                      DataMigrationProperties dataMigrationProperties) {
     return new ElasticsearchInternal(configuration, okHttpClient, objectMapper, dataMigrationProperties);
+  }
+
+  /**
+   * Elasticsearch RESTfull high level client bean
+   *
+   * @param configuration elasticsearch configuration
+   * @return bean
+   */
+  @Bean(destroyMethod = "close")
+  @Autowired
+  public RestHighLevelClient restHighLevelClient(ElasticsearchConfiguration configuration) {
+    return new RestHighLevelClient(
+      RestClient.builder(
+        new HttpHost(configuration.getHost(), configuration.getPort(), configuration.getProtocol())
+      )
+    );
   }
 
 }
