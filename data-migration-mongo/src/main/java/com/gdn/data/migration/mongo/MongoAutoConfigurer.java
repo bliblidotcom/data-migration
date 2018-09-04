@@ -3,6 +3,7 @@ package com.gdn.data.migration.mongo;
 import java.net.UnknownHostException;
 import java.util.Collections;
 
+import com.gdn.data.migration.core.DataMigrationProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -23,7 +24,7 @@ import com.mongodb.client.MongoDatabase;
  */
 @Configuration
 @AutoConfigureAfter(DataMigrationAutoConfigurer.class)
-@EnableConfigurationProperties(MongoConfiguration.class)
+@EnableConfigurationProperties({MongoConfiguration.class, DataMigrationProperties.class})
 public class MongoAutoConfigurer {
 
   /**
@@ -81,8 +82,8 @@ public class MongoAutoConfigurer {
    */
   @Bean
   @Autowired
-  public MongoInternal mongoInternal(MongoDatabase mongoDatabase) {
-    return new MongoInternal(mongoDatabase);
+  public MongoInternal mongoInternal(MongoDatabase mongoDatabase, DataMigrationProperties dataMigrationProperties) {
+    return new MongoInternal(mongoDatabase, dataMigrationProperties);
   }
 
   /**

@@ -2,6 +2,7 @@ package com.gdn.data.migration.elasticsearch;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.gdn.data.migration.core.DataMigrationProperties;
 import com.gdn.data.migration.core.Internal;
 import okhttp3.*;
 
@@ -24,11 +25,14 @@ public class ElasticsearchInternal implements Internal {
   private TypeReference<Map<String, Object>> mapTypeReference = new TypeReference<Map<String, Object>>() {
   };
 
+  private DataMigrationProperties dataMigrationProperties;
+
   public ElasticsearchInternal(ElasticsearchConfiguration configuration, OkHttpClient okHttpClient,
-                               ObjectMapper objectMapper) {
+                               ObjectMapper objectMapper, DataMigrationProperties dataMigrationProperties) {
     this.configuration = configuration;
     this.okHttpClient = okHttpClient;
     this.objectMapper = objectMapper;
+    this.dataMigrationProperties = dataMigrationProperties;
   }
 
   /**
@@ -40,7 +44,7 @@ public class ElasticsearchInternal implements Internal {
   private Long getCount() {
     try {
       Request request = new Request.Builder()
-          .url(configuration.getFullUrl() + "/" + VERSION_NAME + "/_count")
+          .url(configuration.getFullUrl() + "/" + dataMigrationProperties.getVersionTableName() + "/_count")
           .get()
           .build();
 
@@ -66,12 +70,12 @@ public class ElasticsearchInternal implements Internal {
   public void updateVersion(Long version) {
     try {
       Map<String, Object> map = new HashMap<>();
-      map.put(VERSION_NAME, version);
+      map.put(dataMigrationProperties.getVersionTableName(), version);
 
       String json = objectMapper.writeValueAsString(map);
 
       Request request = new Request.Builder()
-          .url(configuration.getFullUrl() + "/" + VERSION_NAME + "/" + VERSION_NAME)
+          .url(configuration.getFullUrl() + "/" + dataMigrationProperties.getVersionTableName() + "/" + dataMigrationProperties.getVersionTableName())
           .put(RequestBody.create(MediaType.parse("application/json"), json))
           .build();
 
@@ -88,7 +92,7 @@ public class ElasticsearchInternal implements Internal {
   public Long currentVersion() {
     try {
       Request request = new Request.Builder()
-          .url(configuration.getFullUrl() + "/" + VERSION_NAME + "/" + VERSION_NAME)
+          .url(configuration.getFullUrl() + "/" + dataMigrationProperties.getVersionTableName() + "/" + dataMigrationProperties.getVersionTableName())
           .get()
           .build();
 
@@ -99,7 +103,7 @@ public class ElasticsearchInternal implements Internal {
       Map<String, Object> map = objectMapper.readValue(json, mapTypeReference);
       Map<String, Object> source = (Map<String, Object>) map.get("_source");
 
-      return Long.valueOf(source.get(VERSION_NAME).toString());
+      return Long.valueOf(source.get(dataMigrationProperties.getVersionTableName()).toString());
     } catch (Throwable t) {
       throw new RuntimeException(t);
     }

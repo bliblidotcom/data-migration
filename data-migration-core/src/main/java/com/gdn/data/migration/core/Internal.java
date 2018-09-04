@@ -8,8 +8,6 @@ package com.gdn.data.migration.core;
  */
 public interface Internal {
 
-  String VERSION_NAME = "blibli_migration_version";
-
   /**
    * Ensure version is exists in datastore
    */

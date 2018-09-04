@@ -9,6 +9,7 @@ import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
+import com.gdn.data.migration.core.DataMigrationProperties;
 import org.bson.conversions.Bson;
 import org.junit.After;
 import org.junit.Before;
@@ -40,20 +41,22 @@ public class MongoInternalTest {
 
   @Mock
   FindIterable<BasicDBObject> listVersion;
+  
+  private DataMigrationProperties dataMigrationProperties = new DataMigrationProperties();
 
   @Test
   public void currentVersionTest() {
     when(listVersion.first()).thenReturn(version1);
-    when(versionCollection.find(new BasicDBObject("_id", Internal.VERSION_NAME))).thenReturn(
+    when(versionCollection.find(new BasicDBObject("_id", dataMigrationProperties.getVersionTableName()))).thenReturn(
         listVersion);
-    when(mongoDatabase.getCollection(Internal.VERSION_NAME, BasicDBObject.class)).thenReturn(
+    when(mongoDatabase.getCollection(dataMigrationProperties.getVersionTableName(), BasicDBObject.class)).thenReturn(
         versionCollection);
-    mongoInternal = new MongoInternal(mongoDatabase);
+    mongoInternal = new MongoInternal(mongoDatabase, dataMigrationProperties);
 
     Long currentVersion = this.mongoInternal.currentVersion();
 
-    verify(mongoDatabase).getCollection(Internal.VERSION_NAME, BasicDBObject.class);
-    verify(versionCollection).find(new BasicDBObject("_id", Internal.VERSION_NAME));
+    verify(mongoDatabase).getCollection(dataMigrationProperties.getVersionTableName(), BasicDBObject.class);
+    verify(versionCollection).find(new BasicDBObject("_id", dataMigrationProperties.getVersionTableName()));
     verify(listVersion).first();
     assertEquals(currentVersion, VERSION_1);
   }
@@ -61,13 +64,13 @@ public class MongoInternalTest {
   @Test
   public void ensureVersionEmptyTest() {
     when(versionCollection.count()).thenReturn(0L);
-    when(mongoDatabase.getCollection(Internal.VERSION_NAME, BasicDBObject.class)).thenReturn(
+    when(mongoDatabase.getCollection(dataMigrationProperties.getVersionTableName(), BasicDBObject.class)).thenReturn(
         versionCollection);
-    mongoInternal = new MongoInternal(mongoDatabase);
+    mongoInternal = new MongoInternal(mongoDatabase, dataMigrationProperties);
 
     this.mongoInternal.ensureVersion();
 
-    verify(mongoDatabase).getCollection(Internal.VERSION_NAME, BasicDBObject.class);
+    verify(mongoDatabase).getCollection(dataMigrationProperties.getVersionTableName(), BasicDBObject.class);
     verify(versionCollection).count();
     verify(versionCollection).insertOne(version0);
   }
@@ -76,13 +79,13 @@ public class MongoInternalTest {
   @Test
   public void ensureVersionTest() {
     when(versionCollection.count()).thenReturn(2L);
-    when(mongoDatabase.getCollection(Internal.VERSION_NAME, BasicDBObject.class)).thenReturn(
+    when(mongoDatabase.getCollection(dataMigrationProperties.getVersionTableName(), BasicDBObject.class)).thenReturn(
         versionCollection);
-    mongoInternal = new MongoInternal(mongoDatabase);
+    mongoInternal = new MongoInternal(mongoDatabase, dataMigrationProperties);
 
     this.mongoInternal.ensureVersion();
 
-    verify(mongoDatabase).getCollection(Internal.VERSION_NAME, BasicDBObject.class);
+    verify(mongoDatabase).getCollection(dataMigrationProperties.getVersionTableName(), BasicDBObject.class);
     verify(versionCollection).count();
     verify(versionCollection, times(0)).insertOne(version0);
   }
@@ -93,11 +96,11 @@ public class MongoInternalTest {
     initMocks(this);
 
     version0 = new BasicDBObject();
-    version0.put("_id", Internal.VERSION_NAME);
+    version0.put("_id", dataMigrationProperties.getVersionTableName());
     version0.put("value", 0L);
 
     version1 = new BasicDBObject();
-    version1.put("_id", Internal.VERSION_NAME);
+    version1.put("_id", dataMigrationProperties.getVersionTableName());
     version1.put("value", 1L);
 
   }
@@ -111,15 +114,15 @@ public class MongoInternalTest {
 
   @Test
   public void updateVersionTest() {
-    when(mongoDatabase.getCollection(Internal.VERSION_NAME, BasicDBObject.class)).thenReturn(
+    when(mongoDatabase.getCollection(dataMigrationProperties.getVersionTableName(), BasicDBObject.class)).thenReturn(
         versionCollection);
-    mongoInternal = new MongoInternal(mongoDatabase);
+    mongoInternal = new MongoInternal(mongoDatabase, dataMigrationProperties);
 
     this.mongoInternal.updateVersion(VERSION_1);
 
     BasicDBObject object = new BasicDBObject();
     object.put("value", VERSION_1);
-    verify(mongoDatabase).getCollection(Internal.VERSION_NAME, BasicDBObject.class);
+    verify(mongoDatabase).getCollection(dataMigrationProperties.getVersionTableName(), BasicDBObject.class);
     verify(versionCollection).updateOne(any(Bson.class), eq(new BasicDBObject("$set", object)));
   }
 }
