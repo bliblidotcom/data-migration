@@ -2,6 +2,7 @@ package com.gdn.data.migration.elasticsearch;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gdn.data.migration.core.DataMigrationAutoConfigurer;
+import com.gdn.data.migration.core.DataMigrationProperties;
 import okhttp3.OkHttpClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
@@ -14,7 +15,7 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 @AutoConfigureAfter(DataMigrationAutoConfigurer.class)
-@EnableConfigurationProperties(ElasticsearchConfiguration.class)
+@EnableConfigurationProperties({ElasticsearchConfiguration.class, DataMigrationProperties.class})
 public class ElasticsearchAutoConfigurer {
 
   /**
@@ -39,8 +40,9 @@ public class ElasticsearchAutoConfigurer {
   @Autowired
   public ElasticsearchInternal elasticsearchInternal(ElasticsearchConfiguration configuration,
                                                      OkHttpClient okHttpClient,
-                                                     ObjectMapper objectMapper) {
-    return new ElasticsearchInternal(configuration, okHttpClient, objectMapper);
+                                                     ObjectMapper objectMapper,
+                                                     DataMigrationProperties dataMigrationProperties) {
+    return new ElasticsearchInternal(configuration, okHttpClient, objectMapper, dataMigrationProperties);
   }
 
 }

@@ -1,5 +1,6 @@
 package com.gdn.data.migration.postgre;
 
+import com.gdn.data.migration.core.DataMigrationProperties;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
@@ -64,6 +65,6 @@ public class PostgreAutoConfigurerTest {
 
     PostgreService ps = postgreAutoConfigurer.postgreService(ds);
 
-    PostgreInternal pi = postgreAutoConfigurer.postgreInternal(ps);
+    PostgreInternal pi = postgreAutoConfigurer.postgreInternal(ps, DataMigrationProperties.builder().build());
   }
 }

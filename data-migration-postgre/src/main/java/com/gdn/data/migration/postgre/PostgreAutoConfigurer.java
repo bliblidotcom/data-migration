@@ -1,6 +1,7 @@
 package com.gdn.data.migration.postgre;
 
 import com.gdn.data.migration.core.DataMigrationAutoConfigurer;
+import com.gdn.data.migration.core.DataMigrationProperties;
 import org.jooq.DSLContext;
 import org.jooq.SQLDialect;
 import org.jooq.impl.DSL;
@@ -16,7 +17,7 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 @AutoConfigureAfter(DataMigrationAutoConfigurer.class)
-@EnableConfigurationProperties(PostgreConfiguration.class)
+@EnableConfigurationProperties({PostgreConfiguration.class, DataMigrationProperties.class})
 public class PostgreAutoConfigurer {
 
   /**
@@ -56,8 +57,8 @@ public class PostgreAutoConfigurer {
    */
   @Bean
   @Autowired
-  public PostgreInternal postgreInternal(PostgreService postgreService) {
-    return new PostgreInternal(postgreService);
+  public PostgreInternal postgreInternal(PostgreService postgreService, DataMigrationProperties dataMigrationProperties) {
+    return new PostgreInternal(postgreService, dataMigrationProperties);
   }
 
 }

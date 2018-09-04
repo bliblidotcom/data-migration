@@ -6,6 +6,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
+import com.gdn.data.migration.core.DataMigrationProperties;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
@@ -34,6 +35,8 @@ public class MongoAutoConfigurerTest {
 
   @InjectMocks
   private MongoAutoConfigurer mongoAutoConfigurer;
+
+  private DataMigrationProperties dataMigrationProperties = DataMigrationProperties.builder().build();
 
   @Test
   public void mongoClientWithoutUsernameTest() {
@@ -74,9 +77,9 @@ public class MongoAutoConfigurerTest {
   @Test
   public void mongoInternalTest() {
     MongoDatabase mongoDatabase = mock(MongoDatabase.class);
-    when(mongoDatabase.getCollection(Internal.VERSION_NAME, BasicDBObject.class)).thenReturn(null);
+    when(mongoDatabase.getCollection(dataMigrationProperties.getVersionTableName(), BasicDBObject.class)).thenReturn(null);
 
-    MongoInternal mongoInternal = mongoAutoConfigurer.mongoInternal(mongoDatabase);
+    MongoInternal mongoInternal = mongoAutoConfigurer.mongoInternal(mongoDatabase, dataMigrationProperties);
 
     assertNotNull(mongoInternal);
   }

@@ -7,6 +7,7 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.MockitoAnnotations.initMocks;
 import static org.mockito.Mockito.when;
 
+import com.gdn.data.migration.core.DataMigrationProperties;
 import org.jooq.Constraint;
 import org.jooq.CreateTableAsStep;
 import org.jooq.CreateTableColumnStep;
@@ -136,7 +137,7 @@ public class PostgreInternalTest {
 	@Before
 	public void setUp() {
 		initMocks(this);
-		postgreInternal = new PostgreInternal(postgreService);
+		postgreInternal = new PostgreInternal(postgreService, new DataMigrationProperties());
 	}
 	
 	@Test

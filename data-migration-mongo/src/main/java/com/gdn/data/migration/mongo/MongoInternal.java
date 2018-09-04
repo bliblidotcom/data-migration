@@ -1,5 +1,6 @@
 package com.gdn.data.migration.mongo;
 
+import com.gdn.data.migration.core.DataMigrationProperties;
 import com.gdn.data.migration.core.Internal;
 import com.mongodb.BasicDBObject;
 import com.mongodb.client.MongoCollection;
@@ -17,15 +18,18 @@ public class MongoInternal implements Internal {
 
   private MongoCollection<BasicDBObject> versionCollection;
 
-  public MongoInternal(MongoDatabase mongoDatabase) {
-    this.versionCollection = mongoDatabase.getCollection(VERSION_NAME, BasicDBObject.class);
+  private DataMigrationProperties dataMigrationProperties;
+
+  public MongoInternal(MongoDatabase mongoDatabase, DataMigrationProperties dataMigrationProperties) {
+    this.dataMigrationProperties = dataMigrationProperties;
+    this.versionCollection = mongoDatabase.getCollection(dataMigrationProperties.getVersionTableName(), BasicDBObject.class);
   }
 
   @Override
   public void ensureVersion() {
     if (versionCollection.count() == 0) {
       BasicDBObject object = new BasicDBObject();
-      object.put("_id", VERSION_NAME);
+      object.put("_id", dataMigrationProperties.getVersionTableName());
       object.put("value", 0L);
 
       versionCollection.insertOne(object);
@@ -38,14 +42,14 @@ public class MongoInternal implements Internal {
     object.put("value", version);
 
     versionCollection.updateOne(
-        Filters.eq("_id", VERSION_NAME),
+        Filters.eq("_id", dataMigrationProperties.getVersionTableName()),
         new BasicDBObject("$set", object)
     );
   }
 
   @Override
   public Long currentVersion() {
-    return versionCollection.find(new BasicDBObject("_id", VERSION_NAME))
+    return versionCollection.find(new BasicDBObject("_id", dataMigrationProperties.getVersionTableName()))
         .first().getLong("value");
   }
 
