@@ -4,7 +4,7 @@
 
   <groupId>com.blibli.oss</groupId>
   <artifactId>data-migration</artifactId>
-  <version>0.0.5-SNAPSHOT</version>
+  <version>0.0.6-SNAPSHOT</version>
 
   <scm>
     <connection>scm:git:git@github.com:bliblidotcom/data-migration.git</connection>
