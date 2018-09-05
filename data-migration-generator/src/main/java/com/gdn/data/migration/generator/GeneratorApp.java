@@ -22,7 +22,7 @@ import org.springframework.context.annotation.FilterType;
     CassandraAutoConfiguration.class,
     MongoDataAutoConfiguration.class
 }, excludeName = {
-    "com.gdn.data.migration.elaticsearch.ElasticsearchAutoConfigurer",
+    "com.gdn.data.migration.elastic.ElasticsearchAutoConfigurer",
     "com.gdn.data.migration.postgre.PostgreAutoConfigurer",
     "com.gdn.data.migration.mongo.MongoAutoConfigurer",
     "com.gdn.data.migration.cassandra.CassandraAutoConfigurer",
